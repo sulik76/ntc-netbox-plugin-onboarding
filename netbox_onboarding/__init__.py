@@ -12,7 +12,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-__version__ = "2.2.0"
+__version__ = "3.1.0"
 
 from extras.plugins import PluginConfig
 
@@ -27,8 +27,8 @@ class OnboardingConfig(PluginConfig):
     description = "A plugin for NetBox to easily onboard new devices."
     base_url = "onboarding"
     required_settings = []
-    min_version = "2.8.1"
-    max_version = "2.11.99"
+    min_version = "3.0.0"
+    max_version = "3.1.99"
     default_settings = {
         "create_platform_if_missing": True,
         "create_manufacturer_if_missing": True,

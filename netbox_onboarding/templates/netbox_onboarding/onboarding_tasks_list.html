@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base/layout.html' %}
 {% load buttons %}
 
 {% block content %}
@@ -11,10 +11,7 @@
 <h1>{% block title %}Onboarding Tasks{% endblock %}</h1>
 <div class="row">
 	<div class="col-md-9">
-        {% include 'utilities/obj_table.html' with bulk_delete_url="plugins:netbox_onboarding:onboardingtask_bulk_delete" %}
+        {% include 'netbox_onboarding/obj_table.html' with bulk_delete_url="plugins:netbox_onboarding:onboardingtask_bulk_delete" %}
     </div>
-	<div class="col-md-3 noprint">
-		{% include 'inc/search_panel.html' %}
-	</div>
 </div>
 {% endblock %}
