@@ -12,7 +12,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from django.urls import path
-from extras.views import ObjectChangeLogView
+from netbox.views.generic import ObjectChangeLogView
 
 from .models import OnboardingTask
 from .views import (

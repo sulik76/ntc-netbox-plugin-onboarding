@@ -12,7 +12,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import django_tables2 as tables
-from utilities.tables import BaseTable, ToggleColumn
+from netbox.tables import BaseTable, ToggleColumn
 from .models import OnboardingTask
 
 
