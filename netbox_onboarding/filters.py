@@ -17,23 +17,12 @@ from django.db.models import Q
 
 from dcim.models import Site, DeviceRole, Platform
 
-from .release import NETBOX_RELEASE_CURRENT, NETBOX_RELEASE_211
 from .models import OnboardingTask
 
+from netbox.filtersets import BaseFilterSet  # pylint: disable=no-name-in-module, import-error
 
-if NETBOX_RELEASE_CURRENT < NETBOX_RELEASE_211:
-    from utilities.filters import NameSlugSearchFilterSet  # pylint: disable=no-name-in-module, import-error
-
-    class FitersetMixin(NameSlugSearchFilterSet):
-        """FilterSet Mixin."""
-
-
-else:
-    from netbox.filtersets import BaseFilterSet  # pylint: disable=no-name-in-module, import-error
-
-    class FitersetMixin(BaseFilterSet):
-        """FilterSet Mixin."""
-
+class FitersetMixin(BaseFilterSet):
+    """FilterSet Mixin."""
 
 class OnboardingTaskFilter(FitersetMixin):
     """Filter capabilities for OnboardingTask instances."""
