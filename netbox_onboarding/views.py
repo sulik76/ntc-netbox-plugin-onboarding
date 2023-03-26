@@ -15,8 +15,6 @@ import logging
 
 from django.shortcuts import get_object_or_404, render
 
-
-from .release import NETBOX_RELEASE_CURRENT, NETBOX_RELEASE_29, NETBOX_RELEASE_210
 from .filters import OnboardingTaskFilter
 from .forms import OnboardingTaskForm, OnboardingTaskFilterForm, OnboardingTaskFeedCSVForm
 from .models import OnboardingTask
@@ -26,81 +24,31 @@ logger = logging.getLogger("rq.worker")
 
 # pylint: disable=ungrouped-imports,no-name-in-module
 
-if NETBOX_RELEASE_CURRENT < NETBOX_RELEASE_29:
-    from django.contrib.auth.mixins import PermissionRequiredMixin
-    from django.views.generic import View
-    from utilities.views import BulkDeleteView, BulkImportView, ObjectEditView, ObjectListView
+from netbox.views import generic
 
-    class ReleaseMixinOnboardingTaskView(PermissionRequiredMixin, View):
-        """Release Mixin View for presenting a single OnboardingTask."""
+# ObjectView, BulkDeleteView, BulkImportView, ObjectEditView, ObjectListView
 
-        permission_required = "netbox_onboarding.view_onboardingtask"
+class ReleaseMixinOnboardingTaskView(generic.ObjectView):
+    """Release Mixin View for presenting a single OnboardingTask."""
 
-    class ReleaseMixinOnboardingTaskListView(PermissionRequiredMixin, ObjectListView):
-        """Release Mixin View for listing all extant OnboardingTasks."""
+class ReleaseMixinOnboardingTaskListView(generic.ObjectListView):
+    """Release Mixin View for listing all extant OnboardingTasks."""
 
-        permission_required = "netbox_onboarding.view_onboardingtask"
+class ReleaseMixinOnboardingTaskCreateView(generic.ObjectEditView):
+    """Release Mixin View for creating a new OnboardingTask."""
 
-    class ReleaseMixinOnboardingTaskCreateView(PermissionRequiredMixin, ObjectEditView):
-        """Release Mixin View for creating a new OnboardingTask."""
+class ReleaseMixinOnboardingTaskBulkDeleteView(generic.BulkDeleteView):
+    """Release Mixin View for deleting one or more OnboardingTasks."""
 
-        permission_required = "netbox_onboarding.add_onboardingtask"
-
-    class ReleaseMixinOnboardingTaskBulkDeleteView(PermissionRequiredMixin, BulkDeleteView):
-        """Release Mixin View for deleting one or more OnboardingTasks."""
-
-        permission_required = "netbox_onboarding.delete_onboardingtask"
-
-    class ReleaseMixinOnboardingTaskFeedBulkImportView(PermissionRequiredMixin, BulkImportView):
-        """Release Mixin View for bulk-importing a CSV file to create OnboardingTasks."""
-
-        permission_required = "netbox_onboarding.add_onboardingtask"
-
-
-elif NETBOX_RELEASE_29 <= NETBOX_RELEASE_CURRENT < NETBOX_RELEASE_210:
-    from utilities.views import ObjectView, BulkDeleteView, BulkImportView, ObjectEditView, ObjectListView
-
-    class ReleaseMixinOnboardingTaskView(ObjectView):
-        """Release Mixin View for presenting a single OnboardingTask."""
-
-    class ReleaseMixinOnboardingTaskListView(ObjectListView):
-        """Release Mixin View for listing all extant OnboardingTasks."""
-
-    class ReleaseMixinOnboardingTaskCreateView(ObjectEditView):
-        """Release Mixin View for creating a new OnboardingTask."""
-
-    class ReleaseMixinOnboardingTaskBulkDeleteView(BulkDeleteView):
-        """Release Mixin View for deleting one or more OnboardingTasks."""
-
-    class ReleaseMixinOnboardingTaskFeedBulkImportView(BulkImportView):
-        """Release Mixin View for bulk-importing a CSV file to create OnboardingTasks."""
-
-
-elif NETBOX_RELEASE_CURRENT >= NETBOX_RELEASE_210:
-    from netbox.views import generic
-
-    # ObjectView, BulkDeleteView, BulkImportView, ObjectEditView, ObjectListView
-
-    class ReleaseMixinOnboardingTaskView(generic.ObjectView):
-        """Release Mixin View for presenting a single OnboardingTask."""
-
-    class ReleaseMixinOnboardingTaskListView(generic.ObjectListView):
-        """Release Mixin View for listing all extant OnboardingTasks."""
-
-    class ReleaseMixinOnboardingTaskCreateView(generic.ObjectEditView):
-        """Release Mixin View for creating a new OnboardingTask."""
-
-    class ReleaseMixinOnboardingTaskBulkDeleteView(generic.BulkDeleteView):
-        """Release Mixin View for deleting one or more OnboardingTasks."""
-
-    class ReleaseMixinOnboardingTaskFeedBulkImportView(generic.BulkImportView):
-        """Release Mixin View for bulk-importing a CSV file to create OnboardingTasks."""
+class ReleaseMixinOnboardingTaskFeedBulkImportView(generic.BulkImportView):
+    """Release Mixin View for bulk-importing a CSV file to create OnboardingTasks."""
 
 
 class OnboardingTaskView(ReleaseMixinOnboardingTaskView):
     """View for presenting a single OnboardingTask."""
 
     queryset = OnboardingTask.objects.all()
+    default_return_url = "plugins:netbox_onboarding:onboardingtask_list"
 
     def get(self, request, pk):  # pylint: disable=invalid-name, missing-function-docstring
         """Get request."""
@@ -124,9 +72,9 @@ class OnboardingTaskListView(ReleaseMixinOnboardingTaskListView):
 class OnboardingTaskCreateView(ReleaseMixinOnboardingTaskCreateView):
     """View for creating a new OnboardingTask."""
 
-    model = OnboardingTask
+    #model = OnboardingTask
     queryset = OnboardingTask.objects.all()
-    model_form = OnboardingTaskForm
+    form = OnboardingTaskForm
     template_name = "netbox_onboarding/onboarding_task_edit.html"
     default_return_url = "plugins:netbox_onboarding:onboardingtask_list"
 
@@ -143,6 +91,6 @@ class OnboardingTaskFeedBulkImportView(ReleaseMixinOnboardingTaskFeedBulkImportV
     """View for bulk-importing a CSV file to create OnboardingTasks."""
 
     queryset = OnboardingTask.objects.all()
-    model_form = OnboardingTaskFeedCSVForm
+    form = OnboardingTaskFeedCSVForm
     table = OnboardingTaskFeedBulkTable
     default_return_url = "plugins:netbox_onboarding:onboardingtask_list"
