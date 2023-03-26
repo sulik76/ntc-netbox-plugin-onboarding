@@ -17,17 +17,8 @@ from django.db import models
 from django.urls import reverse
 from dcim.models import Device
 from .choices import OnboardingStatusChoices, OnboardingFailChoices
-from .release import NETBOX_RELEASE_CURRENT, NETBOX_RELEASE_29, NETBOX_RELEASE_211
 
-# Support NetBox 2.8
-if NETBOX_RELEASE_CURRENT < NETBOX_RELEASE_29:
-    from utilities.models import ChangeLoggedModel  # pylint: disable=no-name-in-module, import-error
-# Support NetBox 2.9, NetBox 2.10
-elif NETBOX_RELEASE_CURRENT < NETBOX_RELEASE_211:
-    from extras.models import ChangeLoggedModel  # pylint: disable=no-name-in-module, import-error
-# Support NetBox 2.11
-else:
-    from netbox.models import ChangeLoggedModel  # pylint: disable=no-name-in-module, import-error
+from netbox.models import ChangeLoggedModel  # pylint: disable=no-name-in-module, import-error
 
 
 class OnboardingTask(ChangeLoggedModel):
@@ -68,10 +59,11 @@ class OnboardingTask(ChangeLoggedModel):
         """Provide absolute URL to an OnboardingTask."""
         return reverse("plugins:netbox_onboarding:onboardingtask", kwargs={"pk": self.pk})
 
-    if NETBOX_RELEASE_CURRENT >= NETBOX_RELEASE_29:
-        from utilities.querysets import RestrictedQuerySet  # pylint: disable=no-name-in-module, import-outside-toplevel
+    from utilities.querysets import RestrictedQuerySet  # pylint: disable=no-name-in-module, import-outside-toplevel
 
-        objects = RestrictedQuerySet.as_manager()
+    objects = RestrictedQuerySet.as_manager()
+
+
 
 
 class OnboardingDevice(models.Model):
