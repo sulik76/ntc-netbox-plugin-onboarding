@@ -41,7 +41,7 @@ class OnboardingTask(ChangeLoggedModel):
     status = models.CharField(max_length=255, choices=OnboardingStatusChoices, help_text="Overall status of the task")
 
     failed_reason = models.CharField(
-        max_length=255, choices=OnboardingFailChoices, help_text="Raison why the task failed (optional)", null=True
+        max_length=255, choices=OnboardingFailChoices, help_text="Reason why the task failed (optional)", null=True
     )
 
     message = models.CharField(max_length=511, blank=True)
