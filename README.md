@@ -51,6 +51,14 @@ PLUGINS = ["netbox_onboarding"]
 #     ADD YOUR SETTINGS HERE
 #   }
 # }
+
+# NAPALM Settings
+NAPALM_USERNAME = 'username'
+NAPALM_PASSWORD = 'MySecretPassword'
+NAPALM_ARGS = {
+    'secret': NAPALM_PASSWORD,
+    # Include any additional args here
+}
 ```
 
 Finally, make sure to run the migrations for this plugin
