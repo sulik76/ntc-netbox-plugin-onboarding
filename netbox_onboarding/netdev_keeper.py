@@ -21,8 +21,8 @@ from napalm import get_network_driver
 from napalm.base.exceptions import ConnectionException, CommandErrorException
 from napalm.base.netmiko_helpers import netmiko_args
 from netmiko.ssh_autodetect import SSHDetect
-from netmiko.exceptionw import NetMikoAuthenticationException
-from netmiko.exceptionw import NetMikoTimeoutException
+from netmiko.exceptions import NetMikoAuthenticationException
+from netmiko.exceptions import NetMikoTimeoutException
 from paramiko.ssh_exception import SSHException
 
 from netbox_onboarding.onboarding.onboarding import StandaloneOnboarding
