@@ -13,6 +13,7 @@ limitations under the License.
 """
 
 from django.conf import settings
+from extras.plugins import get_plugin_config
 
 from .netdev_keeper import NetdevKeeper
 
@@ -85,11 +86,14 @@ class OnboardingManager:
         """Inits class."""
         # Create instance of Onboarding Task Manager class:
         otm = OnboardingTaskManager(ot)
-
+        """
         self.username = username or settings.NAPALM_USERNAME
         self.password = password or settings.NAPALM_PASSWORD
         self.secret = secret or otm.optional_args.get("secret", None) or settings.NAPALM_ARGS.get("secret", None)
-
+        """
+        self.username = username or get_plugin_config('netbox_napalm_plugin', 'NAPALM_USERNAME')
+        self.password = password or get_plugin_config('netbox_napalm_plugin', 'NAPALM_PASSWORD')
+        self.secret = secret or otm.optional_args.get("secret", None) or get_plugin_config('netbox_napalm_plugin', 'NAPALM_ARGS').get("secret", None)
         netdev = NetdevKeeper(
             hostname=otm.ip_address,
             port=otm.port,
